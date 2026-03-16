@@ -115,7 +115,6 @@
       display: flex;
     }
 
-    /* Blur panel behind menu content */
     .menu-panel {
       background: rgba(0, 5, 20, 0.72);
       border: 1px solid #00ffe718;
@@ -151,7 +150,6 @@
       text-transform: uppercase;
     }
 
-    /* Scanline overlay on menu */
     .screen::after {
       content: '';
       position: absolute;
@@ -232,7 +230,6 @@
       color: #00ffe7;
     }
 
-    /* Settings */
     .setting-row {
       display: flex;
       align-items: center;
@@ -353,7 +350,6 @@
       text-transform: uppercase;
     }
 
-    /* Music bar */
     #music-bar {
       position: fixed;
       bottom: 0;
@@ -464,7 +460,6 @@
       }
     }
 
-    /* Corner decorations for menu panel */
     .corner {
       position: absolute;
       width: 16px;
@@ -497,7 +492,6 @@
       border-width: 0 2px 2px 0;
     }
 
-    /* Subtitle decorative line */
     .title-line {
       width: 200px;
       height: 1px;
@@ -536,7 +530,6 @@
   </div>
   <button id="pause-btn">&#10074;&#10074; Pause</button>
 
-  <!-- MAIN MENU -->
   <div id="s-main" class="screen active">
     <div class="menu-panel">
       <div class="corner tl"></div>
@@ -553,7 +546,6 @@
     </div>
   </div>
 
-  <!-- PAUSE -->
   <div id="s-pause" class="screen">
     <div class="menu-panel">
       <div class="corner tl"></div>
@@ -569,7 +561,6 @@
     </div>
   </div>
 
-  <!-- GAME OVER -->
   <div id="s-over" class="screen">
     <div class="menu-panel">
       <div class="corner tl"></div>
@@ -586,7 +577,6 @@
     </div>
   </div>
 
-  <!-- CHARACTER SELECT -->
   <div id="s-char" class="screen">
     <div class="menu-panel">
       <div class="corner tl"></div>
@@ -602,7 +592,6 @@
     </div>
   </div>
 
-  <!-- SETTINGS -->
   <div id="s-settings" class="screen">
     <div class="menu-panel">
       <div class="corner tl"></div>
@@ -652,7 +641,6 @@
   </div>
 
   <script>
-    // ── Canvas ────────────────────────────────────────────────
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     let W, H;
@@ -660,7 +648,6 @@
     resize();
     window.addEventListener('resize', () => { resize(); initStars(); });
 
-    // ── Audio ─────────────────────────────────────────────────
     let AC, masterGain, musicGain, sfxGainNode;
     let musicEnabled = true, musicNodes = [], currentTrack = 0;
     const TRACKS = [
@@ -764,7 +751,6 @@
       }
     }
 
-    // Build viz bars
     const vizEl = document.getElementById('viz');
     for (let i = 0; i < 12; i++) {
       const b = document.createElement('div'); b.className = 'vb';
@@ -773,7 +759,6 @@
       vizEl.appendChild(b);
     }
 
-    // ── Settings ──────────────────────────────────────────────
     const cfg = { musicVol: 60, sfxVol: 80, particles: true, difficulty: 'normal' };
 
     document.getElementById('sl-music').addEventListener('input', e => {
@@ -801,7 +786,6 @@
       });
     }
 
-    // ── Characters ────────────────────────────────────────────
     const CHARS = [
       { id: 'scout', name: 'Scout', color: '#00ffe7', speed: 4.0, fireRate: 7, hp: 80, desc: 'Fast · Low HP', shape: 'arrow' },
       { id: 'striker', name: 'Striker', color: '#ff4466', speed: 3.2, fireRate: 10, hp: 100, desc: 'Balanced', shape: 'diamond' },
@@ -871,7 +855,6 @@
       }
     }
 
-    // ── Screens ───────────────────────────────────────────────
     function showScreen(id, pause = false) {
       if (id === 's-char') { fromPause = pause; buildCharGrid(); }
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -885,7 +868,6 @@
       };
     }
 
-    // ── Game State ────────────────────────────────────────────
     const keys = {};
     let mouse = { x: 0, y: 0 }, mouseDown = false;
     let gameRunning = false, gamePaused = false;
@@ -908,17 +890,13 @@
 
     function initStars() {
       stars = [];
-      // Layer 0: tiny distant stars
       for (let i = 0; i < 220; i++)
         stars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 0.8 + 0.2, a: Math.random() * 0.5 + 0.2, layer: 0, twinkle: Math.random() * Math.PI * 2, twinkleSpd: 0.02 + Math.random() * 0.03 });
-      // Layer 1: mid stars
       for (let i = 0; i < 80; i++)
         stars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.2 + 0.5, a: Math.random() * 0.6 + 0.3, layer: 1, twinkle: Math.random() * Math.PI * 2, twinkleSpd: 0.015 + Math.random() * 0.02 });
-      // Layer 2: bright foreground stars
       for (let i = 0; i < 25; i++)
         stars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 2 + 1, a: 0.9, layer: 2, twinkle: Math.random() * Math.PI * 2, twinkleSpd: 0.01 + Math.random() * 0.015 });
 
-      // Nebula clouds
       nebulas = [];
       for (let i = 0; i < 5; i++)
         nebulas.push({
@@ -1053,7 +1031,6 @@
         }
       }
 
-      // Timed random health pack spawns
       packTimer++;
       if (packTimer >= packInterval) {
         const margin = 60;
@@ -1098,15 +1075,12 @@
       }
     }
 
-    // ── Draw ──────────────────────────────────────────────────
     function drawBackground() {
       bgTick += 0.004;
 
-      // Deep space base
       ctx.fillStyle = '#000510';
       ctx.fillRect(0, 0, W, H);
 
-      // Nebula clouds
       for (const n of nebulas) {
         const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.rx);
         grd.addColorStop(0, `hsla(${n.hue},100%,60%,${n.a})`);
@@ -1130,7 +1104,6 @@
       for (let y = -gridSize + scrollY; y < H; y += gridSize) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
       ctx.restore();
 
-      // Horizon glow at bottom
       const hgrd = ctx.createLinearGradient(0, H * 0.72, 0, H);
       hgrd.addColorStop(0, 'rgba(0,255,231,0)');
       hgrd.addColorStop(0.5, 'rgba(0,140,255,0.04)');
@@ -1138,18 +1111,15 @@
       ctx.fillStyle = hgrd;
       ctx.fillRect(0, H * 0.72, W, H * 0.28);
 
-      // Twinkling stars
       for (const s of stars) {
         s.twinkle += s.twinkleSpd;
         const ta = s.a * (0.6 + 0.4 * Math.sin(s.twinkle));
         if (s.layer === 2) {
-          // Bright star with cross-flare
           ctx.save();
           ctx.globalAlpha = ta;
           ctx.shadowColor = '#aaddff'; ctx.shadowBlur = 6;
           ctx.fillStyle = '#ffffff';
           ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
-          // flare lines
           ctx.strokeStyle = `rgba(180,220,255,${ta * 0.5})`; ctx.lineWidth = 0.5;
           const fl = s.r * 4;
           ctx.beginPath();
@@ -1166,7 +1136,6 @@
       }
       ctx.globalAlpha = 1;
 
-      // Floating menu orbs (only on menu screens)
       if (!gameRunning) {
         ctx.save();
         const t = bgTick;
